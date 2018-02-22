@@ -16,14 +16,14 @@ from .models import User
 import datetime
 
 
-def register(request, template_name="adminInterface/register.html"):
+def register(request, template_name="authentication/register.html"):
     form = UserCreateForm(request.POST or None)
 
     if request.POST:
         if form.is_valid():
             form.save()
 
-            return HttpResponseRedirect(reverse(login_function))
+            return HttpResponseRedirect(reverse(login))
 
     c = {"form": form,
          "request": request}
@@ -75,3 +75,33 @@ def activation(request, token_id, template_name="mail/activation.html"):
 
     return render(request,
                   template_name)
+
+
+def login(request):
+    form = LoginForm(request.POST or None)
+
+    if form.is_valid():
+        user = authenticate(username=form.cleaned_data['username'],
+                            password=form.cleaned_data['password'])
+
+        if user:
+            if user.is_active:
+                auth.login(request, user)
+
+                # Redirect to a success page
+                return HttpResponseRedirect(reverse('home'))
+
+            else:
+                messages.error(request,
+                               (_('Please activate your account. Check your mailbox')))
+
+        else:
+            messages.error(request,
+                           (_('User does not exists')))
+
+    c = {"request": request,
+         "login_form": form}
+
+    c.update(csrf(request))
+
+    return render_to_response('authentication/login.html', c)
