@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from .forms import UserCreateForm
+from .forms import UserCreateForm, LoginForm
 from django.utils.translation import ugettext as _
 from django.core.context_processors import csrf
 
