@@ -31,3 +31,11 @@ class UserCreateForm(UserCreationForm):
             user.save()
             mail_sender(user.email)
         return user
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(required=True, label="Kullanici Adi veya Email")
+    password = forms.CharField(widget=forms.PasswordInput, required=True, label="Parola")
+
+    def clean_form(self):
+        return self.cleaned_data
