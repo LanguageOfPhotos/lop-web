@@ -105,3 +105,9 @@ def login(request):
     c.update(csrf(request))
 
     return render_to_response('authentication/login.html', c)
+
+
+@login_required()
+def logout(request):
+    auth.logout(request)
+    return redirect(reverse('home'))
