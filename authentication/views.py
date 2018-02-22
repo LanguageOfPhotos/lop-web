@@ -31,3 +31,47 @@ def register(request, template_name="adminInterface/register.html"):
     c.update(csrf(request))
 
     return render_to_response(template_name, c)
+
+
+def activation(request, token_id, template_name="mail/activation.html"):
+    if token_id:
+        try:
+            email_in_token = tokens_email(token_id)
+
+        except TypeError:
+            messages.error(request,
+                           (_('Error, wrong activation code')))
+            return render(request,
+                          template_name)
+
+        result = User.objects.filter(email=email_in_token).exists()
+
+        if result:
+            expire_date_in_token = tokens_expire_date(token_id)
+
+            if str(expire_date_in_token) > str(datetime.datetime.today()):
+                user = User.objects.get(email=email_in_token)
+                user.is_active = True
+                user.save()
+
+                messages.success(request,
+                                 (_('Your account verified. Perfect! Come on, Login now.')))
+
+                return render(request,
+                              template_name)
+
+            else:
+                mail_sender(email_in_token)
+
+                messages.success(request, (_('Old activation mail time expired,'
+                                             'We will send new activation mail to you,'
+                                             'Please check your inbox')))
+
+        else:
+            messages.success(request, (_('Email address not found')))
+
+    else:
+        messages.success(request, (_('Token not found')))
+
+    return render(request,
+                  template_name)
