@@ -34,8 +34,8 @@ class UserCreateForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(required=True, label="Kullanici Adi veya Email")
-    password = forms.CharField(widget=forms.PasswordInput, required=True, label="Parola")
+    username = forms.CharField(required=True, label="Username or Email")
+    password = forms.CharField(widget=forms.PasswordInput, required=True, label="Password")
 
     def clean_form(self):
         return self.cleaned_data
