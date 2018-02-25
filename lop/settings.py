@@ -30,6 +30,15 @@ DATABASES = {
     }
 }
 
+# MAIL_PASSWD = willbehiddenlocalvariable
+
+# Email setup
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'languagephotos@gmail.com'
+# EMAIL_HOST_PASSWORD = MAIL_PASSWD
+EMAIL_PORT = 587
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
