@@ -3,18 +3,27 @@ from django.conf import settings
 
 
 urlpatterns = patterns('',
-                       # home urls
-                       url(r'^$',
-                           'lop.views.home',
-                           name='home'),
+                       # # home urls
+                       # url(r'^$',
+                       #     'lop.views.home',
+                       #     name='home'),
 
                        # authentication app urls
                        url(r'^login',
                            'authentication.views.login',
                            name='login'),
+
                        url(r'^register',
                            'authentication.views.register',
                            name='register'),
+
+                       url(r'^activation/(?P<token_id>.*)',
+                           'authentication.views.activation',
+                           name='activation'),
+
+                       url(r'^logout$',
+                           'authentication.views.logout',
+                           name='logout'),
                        )
 
 
