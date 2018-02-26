@@ -3,10 +3,10 @@ from django.conf import settings
 
 
 urlpatterns = patterns('',
-                       # # home urls
-                       # url(r'^$',
-                       #     'lop.views.home',
-                       #     name='home'),
+                       # home urls
+                       url(r'^$',
+                           'home.views.home',
+                           name='home'),
 
                        # authentication app urls
                        url(r'^login',
