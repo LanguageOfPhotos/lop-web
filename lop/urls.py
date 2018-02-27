@@ -24,6 +24,10 @@ urlpatterns = patterns('',
                        url(r'^logout$',
                            'authentication.views.logout',
                            name='logout'),
+
+                       url(r'^new-image$',
+                           'adminInterface.views.newimage',
+                           name='newimage'),
                        )
 
 
