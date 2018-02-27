@@ -43,6 +43,15 @@
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#team">Team</a>
             </li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/new-image">New Image</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/login">Login</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -53,37 +62,41 @@
       <div class="container">
         <div class="intro-text">
           <div class="intro-lead-in">Welcome To LOP</div>
-          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#">Project Github Page</a>
+          <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="https://github.com/LanguageOfPhotos/lop-web">Project Github Page</a>
         </div>
       </div>
     </header>
 
     <!-- Gallery Grid -->
     <section class="bg-light" id="portfolio">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Gallery</h2>
-            <h3 class="section-subheading text-muted">Open Source Image Library</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-sm-6 portfolio-item">
-            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-              <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                  <i class="fa fa-plus fa-3x"></i>
+      {% if all_images %}
+        {% for im in all_images %}
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-12 text-center">
+                <h2 class="section-heading text-uppercase">Gallery</h2>
+                <h3 class="section-subheading text-muted">Open Source Image Library</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-sm-6 portfolio-item">
+                <a class="portfolio-link" data-toggle="modal" href="#{{im.id}}">
+                  <div class="portfolio-hover">
+                    <div class="portfolio-hover-content">
+                      <i class="fa fa-plus fa-3x"></i>
+                    </div>
+                  </div>
+                  <img class="img-fluid" src="{{ im.image.url }}" alt="">
+                </a>
+                <div class="portfolio-caption">
+                  <h4>{{ im.category }}</h4>
+                  <p class="text-muted">{{im.title}}</p>
                 </div>
               </div>
-              <img class="img-fluid" src="{{ STATIC_URL }}static/home/img/portfolio/01-thumbnail.jpg" alt="">
-            </a>
-            <div class="portfolio-caption">
-              <h4>Test</h4>
-              <p class="text-muted">Test Image</p>
             </div>
           </div>
-        </div>
-      </div>
+        {% endfor %}
+      {% endif %}
     </section>
 
     <!-- Team -->
@@ -130,35 +143,6 @@
       </div>
     </section>
 
-    <!--&lt;!&ndash; Clients &ndash;&gt;-->
-    <!--<section class="py-5">-->
-      <!--<div class="container">-->
-        <!--<div class="row">-->
-          <!--<div class="col-md-3 col-sm-6">-->
-            <!--<a href="#">-->
-              <!--<img class="img-fluid d-block mx-auto" src="{{ STATIC_URL }}static/home/img/logos/envato.jpg" alt="">-->
-            <!--</a>-->
-          <!--</div>-->
-          <!--<div class="col-md-3 col-sm-6">-->
-            <!--<a href="#">-->
-              <!--<img class="img-fluid d-block mx-auto" src="{{ STATIC_URL }}static/home/img/logos/designmodo.jpg" alt="">-->
-            <!--</a>-->
-          <!--</div>-->
-          <!--<div class="col-md-3 col-sm-6">-->
-            <!--<a href="#">-->
-              <!--<img class="img-fluid d-block mx-auto" src="{{ STATIC_URL }}static/home/img/logos/themeforest.jpg" alt="">-->
-            <!--</a>-->
-          <!--</div>-->
-          <!--<div class="col-md-3 col-sm-6">-->
-            <!--<a href="#">-->
-              <!--<img class="img-fluid d-block mx-auto" src="{{ STATIC_URL }}static/home/img/logos/creative-market.jpg" alt="">-->
-            <!--</a>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</section>-->
-
-    <!-- Footer -->
     <footer>
       <div class="container">
         <div class="row">
@@ -175,40 +159,42 @@
 
     <!-- Portfolio Modals -->
 
-    <!-- Modal 1 -->
-    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="close-modal" data-dismiss="modal">
-            <div class="lr">
-              <div class="rl"></div>
-            </div>
-          </div>
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-8 mx-auto">
-                <div class="modal-body">
-                  <!-- Project Details Go Here -->
-                  <h2 class="text-uppercase">Test Image</h2>
-                  <p class="item-intro text-muted">Test Image Content</p>
-                  <img class="img-fluid d-block mx-auto" src="{{ STATIC_URL }}static/home/img/portfolio/01-full.jpg" alt="">
-                  <p>Test Image Content</p>
-                  <ul class="list-inline">
-                    <li>Date: January 2018</li>
-                    <li>Client: Test Client</li>
-                    <li>Category: Test Category</li>
-                  </ul>
-                  <button class="btn btn-primary" data-dismiss="modal" type="button">
-                    <i class="fa fa-times"></i>
-                    Close Image</button>
+    {% if all_images %}
+      {% for im in all_images %}
+        <!-- Modal -->
+        <div class="portfolio-modal modal fade" id="{{ im.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                  <div class="rl"></div>
+                </div>
+              </div>
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-8 mx-auto">
+                    <div class="modal-body">
+                      <!-- Project Details Go Here -->
+                      <h2 class="text-uppercase">{{ im.title }}</h2>
+                      <p class="item-intro text-muted">{{ im.category }}</p>
+                      <img class="img-fluid d-block mx-auto" src="{{ im.image.url }}" alt="">
+                      <p>{{ im.country }}</p>
+                      <ul class="list-inline">
+                        <li>Date: {{ im.created_at}}</li>
+                        <li>User: {{ im.which_user }}</li>
+                      </ul>
+                      <button class="btn btn-primary" data-dismiss="modal" type="button">
+                        <i class="fa fa-times"></i>
+                        Close Image</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
+      {% endfor %}
+    {% endif %}
     <!-- Bootstrap core JavaScript -->
     <script src="{{ STATIC_URL }}static/home/vendor/jquery/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}static/home/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
